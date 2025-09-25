@@ -2,6 +2,11 @@ import requests
 import os
 from dotenv import load_dotenv
 from pathlib import Path
+import pandas as pd
+
+pd.set_option('display.max_colwidth', None)
+pd.set_option('display.max_rows', None)
+pd.set_option('display.max_columns', None)
 
 dotenv_path = Path('/Users/siddharthshrivastav/IdeaProjects/dataEngineer/secrets.env')
 load_dotenv(dotenv_path=dotenv_path)
@@ -19,5 +24,13 @@ data = response.json()
 
 movies = data['results']
 
+data = []
+
 for movie in movies:
-    print(movie)
+    row = [movie['title'],movie['popularity'],movie['release_date'],movie['vote_average'],movie['vote_count']]
+    data.append(row)
+
+movie_df = pd.DataFrame(data, columns = ["title","popularity","release_date","vote_average","vote_count"])
+print(movie_df)
+
+print(movie_df.describe().T)
