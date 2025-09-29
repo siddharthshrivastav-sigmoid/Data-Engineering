@@ -1,5 +1,3 @@
-from typing import final
-
 import requests
 import os
 from dotenv import load_dotenv
@@ -58,7 +56,7 @@ def print_menu() -> None:
     2. See the current most popular movie
     3. See highest rated movie
     4. See movie the highest number of votes
-    5. See the movie with the closest release date to today
+    5. highest average score for every release date
     6. See the Top 5 current best movies 
     7. See some outlier
     8. See the average ratings of all the movies
@@ -66,7 +64,7 @@ def print_menu() -> None:
     10. See the total number of votes casted for all the movies
     ''')
 
-def main() -> None:
+def main(df : pd.DataFrame) -> None:
     choice = 1
     while choice:
         print_menu()
@@ -74,12 +72,24 @@ def main() -> None:
         if choice == 0:
             print("Thanks for using our service !")
         elif choice == 1:
-            df = fetch_data()
-            print(df)
+            print(df['title'])
             continue
+        elif choice == 2:
+            most_pop = df.sort_values(by = "popularity", ascending = False)
+            print(most_pop['title'].head(1))
+        elif choice == 3:
+            highest_rated = df.sort_values(by = "vote_average", ascending = False)
+            print(highest_rated[['title','vote_average']].head(1))
+        elif choice == 4:
+            most_voted = df.sort_values(by = "vote_count", ascending = False)
+            print(most_voted[['title','vote_count']].head(1))
+        elif choice == 5:
+            grouped_df = df.groupby('release_date')['vote_average'].sum()
+            print(grouped_df)
         else:
             print("")
 
     return None
 
-main()
+df = fetch_data() # only fetch data once
+main(df)
