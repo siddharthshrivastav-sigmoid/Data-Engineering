@@ -4,6 +4,8 @@ from dotenv import load_dotenv
 from pathlib import Path
 import pandas as pd
 
+# git remote -> siddharth, branch -> main
+
 pd.set_option('display.max_colwidth', None)
 pd.set_option('display.max_rows', None)
 pd.set_option('display.max_columns', None)
